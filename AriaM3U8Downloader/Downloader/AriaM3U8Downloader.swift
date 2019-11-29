@@ -20,6 +20,8 @@ public class AriaM3U8Downloader: NSObject {
         return que
     }()
     
+    fileprivate var isStop = false
+    
     /// M3U8 URL
     fileprivate var M3U8_URL: URL!
     /// 下载输出路径
@@ -238,6 +240,7 @@ extension AriaM3U8Downloader {
     /// 停止下载任务
     @objc
     public func stop() {
+        isStop = true
         queue.cancelAllOperations()
         NotificationCenter.post(customeNotification: .DownloadM3U8StopNotification)
     }
@@ -310,24 +313,30 @@ extension AriaM3U8Downloader {
                     #if DEBUG
                     print("queque count:\(self.queue.operations.count)")
                     #endif
-                    let opCount = self.queue.operations.count
-                    let dCount = self.M3U8_Entity.TSDATA.count - opCount
-                    NotificationCenter.post(customeNotification: .DownloadM3U8ProgressNotification, object: Float(Float(dCount) / Float(self.M3U8_Entity.TSDATA.count)))
+                    if !self.isStop {
+                        let opCount = self.queue.operations.count
+                        let dCount = self.M3U8_Entity.TSDATA.count - opCount
+                        NotificationCenter.post(customeNotification: .DownloadM3U8ProgressNotification, object: Float(Float(dCount) / Float(self.M3U8_Entity.TSDATA.count)))
+                    }
                     semaphore.signal()
                 }
                 semaphore.wait()
-                let opCount = self.queue.operations.count
-                let dCount = self.M3U8_Entity.TSDATA.count - opCount
-                NotificationCenter.post(customeNotification: .DownloadM3U8StatusNotification, object: [dCount, self.M3U8_Entity.TSDATA.count])
+                if !self.isStop {
+                    let opCount = self.queue.operations.count
+                    let dCount = self.M3U8_Entity.TSDATA.count - opCount
+                    NotificationCenter.post(customeNotification: .DownloadM3U8StatusNotification, object: [dCount, self.M3U8_Entity.TSDATA.count])
+                }
             }
         }
         DispatchQueue.global().async {
             self.queue.waitUntilAllOperationsAreFinished()
-            NotificationCenter.post(customeNotification: .DownloadM3U8StatusNotification, object: [self.M3U8_Entity.TSDATA.count, self.M3U8_Entity.TSDATA.count])
-            if self.queue.operations.count == 0 {
-                self.createLocalM3U8File()
-                NotificationCenter.post(customeNotification: .DownloadM3U8ProgressNotification, object: 1.0)
-                NotificationCenter.post(customeNotification: .DownloadM3U8CompleteNotification)
+            if !self.isStop {
+                NotificationCenter.post(customeNotification: .DownloadM3U8StatusNotification, object: [self.M3U8_Entity.TSDATA.count, self.M3U8_Entity.TSDATA.count])
+                if self.queue.operations.count == 0 {
+                    self.createLocalM3U8File()
+                    NotificationCenter.post(customeNotification: .DownloadM3U8ProgressNotification, object: 1.0)
+                    NotificationCenter.post(customeNotification: .DownloadM3U8CompleteNotification)
+                }
             }
         }
     }
