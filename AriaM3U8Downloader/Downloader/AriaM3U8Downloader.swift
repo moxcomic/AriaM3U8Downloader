@@ -346,6 +346,7 @@ extension AriaM3U8Downloader {
                     else {
                         self.getSecondClip(m3u8[0]).subscribe(onNext: { (entity) in
                             obs.onNext(entity)
+                            obs.onCompleted()
                         }, onError: { (error) in
                             obs.onError(error)
                         }).disposed(by: self.rx.disposeBag)
@@ -354,6 +355,7 @@ extension AriaM3U8Downloader {
                     self.analysisClips(splitRS: splitRS).subscribe(onNext: { (entity) in
                         self.getTruePrefix(clip: entity.TSDATA[0]).subscribe(onNext: { (_) in
                             obs.onNext(entity)
+                            obs.onCompleted()
                         }, onError: { (error) in
                             obs.onError(error)
                         }).disposed(by: self.rx.disposeBag)
@@ -378,6 +380,7 @@ extension AriaM3U8Downloader {
                         if sec.hasSuffix(".m3u8") {
                             self.getTruePrefix(clip: entity.TSDATA[0], url: URL(string: sec)!).subscribe(onNext: { (_) in
                                 obs.onNext(entity)
+                                obs.onCompleted()
                             }, onError: { (error) in
                                 obs.onError(baseError("\(self.M3U8_URL.absoluteString): -> \n获取 URL 切片失败 -> TRUE PREFIX NOT FOUND -> 2"))
                             }).disposed(by: self.rx.disposeBag)
@@ -445,6 +448,7 @@ extension AriaM3U8Downloader {
             if entity.TSDATA.count > 0 {
                 obs.onNext(entity)
                 obs.onCompleted()
+                obs.onCompleted()
             } else { obs.onError(baseError("获取M3U8内容失败")) }
             return Disposables.create()
         }
@@ -461,6 +465,7 @@ extension AriaM3U8Downloader {
                         #endif
                         self.TRUE_Prefix = URL(string: clipURL)!
                         obs.onNext(maybeRightURL)
+                        obs.onCompleted()
                     } else {
                         #if DEBUG
                         print("current download url is not correct.:\(maybeRightURL)")
