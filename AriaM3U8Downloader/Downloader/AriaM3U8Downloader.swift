@@ -163,8 +163,8 @@ extension AriaM3U8Downloader {
 
 // MARK: - 创建播放文件
 extension AriaM3U8Downloader {
-    @objc
     /// 创建临时M3U8文件,用于未下载完成时播放
+    @objc
     public func createTempLocalM3U8File() {
         let opCount = self.queue.operations.count
         let dCount = self.M3U8_Entity.TSDATA.count - opCount

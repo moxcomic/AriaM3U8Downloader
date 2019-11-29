@@ -14,6 +14,13 @@ public class AriaBackgroundManager: NSObject {
     @objc
     public static let shared = AriaBackgroundManager()
     
+    /// 供OC调用设置 backgroundCompletionHandler
+    /// - Parameter block: backgroundCompletionHandler
+    @objc
+    public func setBackgroundCompletionHandler(block: (() -> ())?) {
+        manager.backgroundCompletionHandler = block
+    }
+    
     public let manager: SessionManager = {
         let configuration = URLSessionConfiguration.background(withIdentifier: "com.moxcomic.AriaM3U8Downloader")
         configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
