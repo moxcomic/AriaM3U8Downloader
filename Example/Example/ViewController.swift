@@ -22,7 +22,7 @@ class ViewController: UIViewController {
         // https://v01-gl-vod.dtslb.com/201910/22/09YSU2z4/3721kb/hls/index.m3u8
         // Seconds
         // https://youku.com-ok-pptv.com/20191003/7712_b1cd8a61/index.m3u8
-        downloader = AriaM3U8Downloader(withURLString: "https://v01-gl-vod.dtslb.com/201910/22/09YSU2z4/3721kb/hls/index.m3u8", outputPath: documentPath.path)
+        downloader = AriaM3U8Downloader(withURLString: "https://youku.com-ok-pptv.com/20191003/7712_b1cd8a61/index.m3u8", outputPath: documentPath.path)
         downloader.start()
         
         downloader.downloadTSSuccessExeBlock = { self.statusLabel.text = $0 }

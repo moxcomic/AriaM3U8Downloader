@@ -212,7 +212,7 @@ extension AriaM3U8Downloader {
         getClip().subscribe(onNext: { (entity) in
             NotificationCenter.post(customeNotification: .DownloadM3U8StartNotification)
             self.M3U8_Entity = entity
-            self.downloadKey()
+            if entity.EXT_X_KEY != nil { self.downloadKey() }
             self.downloadTS()
         }, onError: { (error) in
             #if DEBUG
