@@ -1,0 +1,6 @@
+framework module AriaM3U8Downloader {
+  umbrella header "AriaM3U8Downloader-umbrella.h"
+
+  export *
+  module * { export * }
+}

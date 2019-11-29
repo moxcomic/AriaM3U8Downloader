@@ -1,0 +1,58 @@
+PODS:
+  - Alamofire (4.9.1)
+  - Differentiator (4.0.1)
+  - GCDWebServer/Core (3.5.3)
+  - GCDWebServer/WebDAV (3.5.3):
+    - GCDWebServer/Core
+  - "NSObject+Rx (5.0.2)":
+    - RxSwift (~> 5.0)
+  - RxAlamofire (5.1.0):
+    - RxAlamofire/Core (= 5.1.0)
+  - RxAlamofire/Core (5.1.0):
+    - Alamofire (~> 4.8)
+    - RxSwift (~> 5.0)
+  - RxCocoa (5.0.1):
+    - RxRelay (~> 5)
+    - RxSwift (~> 5)
+  - RxDataSources (4.0.1):
+    - Differentiator (~> 4.0)
+    - RxCocoa (~> 5.0)
+    - RxSwift (~> 5.0)
+  - RxRelay (5.0.1):
+    - RxSwift (~> 5)
+  - RxSwift (5.0.1)
+
+DEPENDENCIES:
+  - Alamofire
+  - GCDWebServer/WebDAV
+  - "NSObject+Rx"
+  - RxAlamofire
+  - RxDataSources
+  - RxSwift
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - Differentiator
+    - GCDWebServer
+    - "NSObject+Rx"
+    - RxAlamofire
+    - RxCocoa
+    - RxDataSources
+    - RxRelay
+    - RxSwift
+
+SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  Differentiator: 886080237d9f87f322641dedbc5be257061b0602
+  GCDWebServer: c0ab22c73e1b84f358d1e2f74bf6afd1c60829f2
+  "NSObject+Rx": 2eb2cf51fd1c554118449a7fbc36e4cd620b9e94
+  RxAlamofire: a2d7621de4c23a0c6e7b476b504acc32838ee341
+  RxCocoa: e741b9749968e8a143e2b787f1dfbff2b63d0a5c
+  RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
+  RxRelay: 89d54507f4fd4d969e6ec1d4bd7f3673640b4640
+  RxSwift: e2dc62b366a3adf6a0be44ba9f405efd4c94e0c4
+
+PODFILE CHECKSUM: 0a9637f4b7b48b96b4b0f551dc9dd16eaed5ec9c
+
+COCOAPODS: 1.8.4

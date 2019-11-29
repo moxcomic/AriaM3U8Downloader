@@ -1,0 +1,24 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'Example' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for Example
+  pod 'AriaM3U8Downloader', :path => '../'
+  pod 'AriaM3U8Downloader/LocalServer', :path => '../'
+  pod 'SJBaseVideoPlayer', :git => 'https://gitee.com/changsanjiang/SJBaseVideoPlayer.git'
+  pod 'SJVideoPlayer', :git => 'https://gitee.com/changsanjiang/SJVideoPlayer.git'
+  pod 'SnapKit'
+
+  target 'ExampleTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'ExampleUITests' do
+    # Pods for testing
+  end
+
+end

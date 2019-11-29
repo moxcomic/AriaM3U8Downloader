@@ -1,0 +1,6 @@
+framework module Pods_AriaM3U8Downloader_AriaM3U8DownloaderTests {
+  umbrella header "Pods-AriaM3U8Downloader-AriaM3U8DownloaderTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
