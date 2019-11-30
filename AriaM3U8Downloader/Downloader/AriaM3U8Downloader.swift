@@ -20,8 +20,6 @@ public class AriaM3U8Downloader: NSObject {
         return que
     }()
     
-    fileprivate var isStop = false
-    
     /// M3U8 URL
     fileprivate var M3U8_URL: URL!
     /// 下载输出路径
@@ -37,6 +35,16 @@ public class AriaM3U8Downloader: NSObject {
     /// App进入后台是否暂停下载, 进入前台时恢复下载
     /// 默认为 True , 如果需要请设置为 False 并自行实现后台下载
     @objc open var autoPauseWhenAppDidEnterBackground = true
+    
+    /// 当前下载状态
+    /// isNotReadyToDownload -> 未完成准备下载
+    /// isReadyToDownload -> 完成下载准备
+    /// isStart -> 开始下载
+    /// isPause -> 暂停下载
+    /// isStop -> 停止下载
+    /// isDownloading -> 下载中
+    /// isComplete -> 下载完成
+    @objc open fileprivate(set) var downloadStatus: AriaDownloadStatus = .isNotReadyToDownload
     
     /// 下载TS文件完成回调
     /// return -> String: TS文件名
@@ -220,6 +228,7 @@ extension AriaM3U8Downloader {
             self.M3U8_Entity = entity
             if entity.EXT_X_KEY != nil { self.downloadKey() }
             self.downloadTS()
+            self.downloadStatus = .isDownloading
         }, onError: { (error) in
             #if DEBUG
             print(error.localizedDescription)
@@ -231,12 +240,15 @@ extension AriaM3U8Downloader {
     @objc
     public func pause() {
         queue.isSuspended = true
+        self.downloadStatus = .isPause
         NotificationCenter.post(customeNotification: .DownloadM3U8PausedNotification)
     }
     
     /// 恢复下载任务
     @objc
     public func resume() {
+        if queue.operations.count > 0 { downloadStatus = .isDownloading }
+        else { downloadStatus = .isComplete }
         queue.isSuspended = false
         NotificationCenter.post(customeNotification: .DownloadM3U8ResumeNotification)
     }
@@ -244,7 +256,7 @@ extension AriaM3U8Downloader {
     /// 停止下载任务
     @objc
     public func stop() {
-        isStop = true
+        downloadStatus = .isStop
         queue.cancelAllOperations()
         NotificationCenter.post(customeNotification: .DownloadM3U8StopNotification)
     }
@@ -317,7 +329,7 @@ extension AriaM3U8Downloader {
                     #if DEBUG
                     print("queque count:\(self.queue.operations.count)")
                     #endif
-                    if !self.isStop {
+                    if self.downloadStatus != .isStop {
                         let opCount = self.queue.operations.count
                         let dCount = self.M3U8_Entity.TSDATA.count - opCount
                         NotificationCenter.post(customeNotification: .DownloadM3U8ProgressNotification, object: Float(Float(dCount) / Float(self.M3U8_Entity.TSDATA.count)))
@@ -325,7 +337,7 @@ extension AriaM3U8Downloader {
                     semaphore.signal()
                 }
                 semaphore.wait()
-                if !self.isStop {
+                if self.downloadStatus != .isStop {
                     let opCount = self.queue.operations.count
                     let dCount = self.M3U8_Entity.TSDATA.count - opCount
                     NotificationCenter.post(customeNotification: .DownloadM3U8StatusNotification, object: [dCount, self.M3U8_Entity.TSDATA.count])
@@ -334,10 +346,11 @@ extension AriaM3U8Downloader {
         }
         DispatchQueue.global().async {
             self.queue.waitUntilAllOperationsAreFinished()
-            if !self.isStop {
+            if self.downloadStatus != .isStop {
                 NotificationCenter.post(customeNotification: .DownloadM3U8StatusNotification, object: [self.M3U8_Entity.TSDATA.count, self.M3U8_Entity.TSDATA.count])
                 if self.queue.operations.count == 0 {
                     self.createLocalM3U8File()
+                    self.downloadStatus = .isComplete
                     NotificationCenter.post(customeNotification: .DownloadM3U8ProgressNotification, object: 1.0)
                     NotificationCenter.post(customeNotification: .DownloadM3U8CompleteNotification)
                 }
@@ -525,5 +538,6 @@ extension AriaM3U8Downloader {
         M3U8_URL = m3u8
         OUTPUT_PATH = output
         registerNotifications()
+        downloadStatus = .isReadyToDownload
     }
 }

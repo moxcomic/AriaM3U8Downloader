@@ -15,6 +15,17 @@ struct baseError: Error {
     init(_ desc: String) { self.desc = desc }
 }
 
+@objc
+public enum AriaDownloadStatus: Int {
+    case isNotReadyToDownload = 0
+    case isReadyToDownload
+    case isStart
+    case isPause
+    case isStop
+    case isDownloading
+    case isComplete
+}
+
 enum AriaNotification: String {
     case DownloadTSSuccessNotification
     case DownloadM3U8ProgressNotification

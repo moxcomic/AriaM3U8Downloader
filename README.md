@@ -42,9 +42,19 @@ downloader.start()
     - App进入后台回调
 - downloadDidBecomeActiveExeBlock
     - App进入前台回调
+- downloadStatus
+    - isNotReadyToDownload -> 未完成下载准备
+    - isReadyToDownload -> 完成下载准备
+    - isStart -> 开始下载
+    - isPause -> 暂停下载
+    - isStop -> 停止下载
+    - isDownloading -> 下载中
+    - isComplete -> 下载完成
 - maxConcurrentOperationCount
     - 同时最大下载TS文件数量, Int 默认为 3
 - autoPauseWhenAppDidEnterBackground
     - App进入后台是否暂停下载, 默认为 True, 如果需要请设置为 False 并自行实现后台下载
 # OC
-`具体未测试, 理论支持`
+```
+具体未测试, 理论支持
+```
