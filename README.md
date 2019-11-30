@@ -44,5 +44,7 @@ downloader.start()
     - App进入前台回调
 - maxConcurrentOperationCount
     - 同时最大下载TS文件数量, Int 默认为 3
+- autoPauseWhenAppDidEnterBackground
+    - App进入后台是否暂停下载, 默认为 True, 如果需要请设置为 False 并自行实现后台下载
 # OC
 `具体未测试, 理论支持`

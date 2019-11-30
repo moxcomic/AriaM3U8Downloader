@@ -34,6 +34,10 @@ public class AriaM3U8Downloader: NSObject {
     /// 最大同时下载数量
     @objc open var maxConcurrentOperationCount = 3 { didSet { queue.maxConcurrentOperationCount = maxConcurrentOperationCount } }
     
+    /// App进入后台是否暂停下载, 进入前台时恢复下载
+    /// 默认为 True , 如果需要请设置为 False 并自行实现后台下载
+    @objc open var autoPauseWhenAppDidEnterBackground = true
+    
     /// 下载TS文件完成回调
     /// return -> String: TS文件名
     @objc open var downloadTSSuccessExeBlock: ((String) -> ())?
@@ -148,7 +152,7 @@ extension AriaM3U8Downloader {
             print("-- RECEIVE APP ENTER BACKGROUND NOTIFICATION --")
             print($0)
             #endif
-            self.pause() // 后台下载暂时未完善所以先暂停
+            if self.autoPauseWhenAppDidEnterBackground { self.pause() }
             self.downloadDidEnterBackgroundExeBlock?()
         }.disposed(by: rx.disposeBag)
         
@@ -157,7 +161,7 @@ extension AriaM3U8Downloader {
             print("-- RECEIVE APP BECOME ACTIVE NOTIFICATION --")
             print($0)
             #endif
-            self.resume() // 后台下载暂时未完善所以进入后台会暂停,这里进行恢复下载
+            if self.autoPauseWhenAppDidEnterBackground { self.resume() }
             self.downloadDidBecomeActiveExeBlock?()
         }.disposed(by: rx.disposeBag)
     }
@@ -456,7 +460,6 @@ extension AriaM3U8Downloader {
             
             if entity.TSDATA.count > 0 {
                 obs.onNext(entity)
-                obs.onCompleted()
                 obs.onCompleted()
             } else { obs.onError(baseError("获取M3U8内容失败")) }
             return Disposables.create()
