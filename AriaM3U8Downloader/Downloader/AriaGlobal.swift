@@ -44,16 +44,20 @@ enum AriaNotification: String {
     var notificationName: NSNotification.Name {
         return NSNotification.Name(stringValue)
     }
+    
+    func notificationNameWithTag(_ tag: Int) -> NSNotification.Name {
+        return NSNotification.Name("\(stringValue)-\(tag)")
+    }
 }
 
 extension NotificationCenter {
-    static func post(customeNotification name: AriaNotification, object: Any? = nil) {
-        NotificationCenter.default.post(name: name.notificationName, object: object)
+    static func post(customeNotification name: AriaNotification, tag: Int = 0, object: Any? = nil) {
+        NotificationCenter.default.post(name: name.notificationNameWithTag(tag), object: object)
     }
 }
 
 extension Reactive where Base: NotificationCenter {
-    func notification(custom name: AriaNotification, object: AnyObject? = nil) -> Observable<Notification> {
-       return notification(name.notificationName, object: object)
+    func notification(custom name: AriaNotification, tag: Int = 0, object: AnyObject? = nil) -> Observable<Notification> {
+       return notification(name.notificationNameWithTag(tag), object: object)
     }
 }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		023AED11239FF27A002BEF95 /* DownloadList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 023AED10239FF27A002BEF95 /* DownloadList.storyboard */; };
+		023AED13239FF35B002BEF95 /* DownloadListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023AED12239FF35B002BEF95 /* DownloadListViewController.swift */; };
 		02E879CD23901902006F6F25 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E879CC23901902006F6F25 /* AppDelegate.swift */; };
 		02E879CF23901902006F6F25 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E879CE23901902006F6F25 /* SceneDelegate.swift */; };
 		02E879D123901902006F6F25 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E879D023901902006F6F25 /* ViewController.swift */; };
@@ -38,6 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		023AED10239FF27A002BEF95 /* DownloadList.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DownloadList.storyboard; sourceTree = "<group>"; };
+		023AED12239FF35B002BEF95 /* DownloadListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadListViewController.swift; sourceTree = "<group>"; };
 		02E879C923901902006F6F25 /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02E879CC23901902006F6F25 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		02E879CE23901902006F6F25 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -120,9 +124,11 @@
 				02E879CE23901902006F6F25 /* SceneDelegate.swift */,
 				02E879D023901902006F6F25 /* ViewController.swift */,
 				02E879D223901902006F6F25 /* Main.storyboard */,
+				023AED10239FF27A002BEF95 /* DownloadList.storyboard */,
 				02E879D523901903006F6F25 /* Assets.xcassets */,
 				02E879D723901903006F6F25 /* LaunchScreen.storyboard */,
 				02E879DA23901903006F6F25 /* Info.plist */,
+				023AED12239FF35B002BEF95 /* DownloadListViewController.swift */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -279,6 +285,7 @@
 			files = (
 				02E879D923901903006F6F25 /* LaunchScreen.storyboard in Resources */,
 				02E879D623901903006F6F25 /* Assets.xcassets in Resources */,
+				023AED11239FF27A002BEF95 /* DownloadList.storyboard in Resources */,
 				02E879D423901902006F6F25 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -407,6 +414,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				023AED13239FF35B002BEF95 /* DownloadListViewController.swift in Sources */,
 				02E879D123901902006F6F25 /* ViewController.swift in Sources */,
 				02E879CD23901902006F6F25 /* AppDelegate.swift in Sources */,
 				02E879CF23901902006F6F25 /* SceneDelegate.swift in Sources */,

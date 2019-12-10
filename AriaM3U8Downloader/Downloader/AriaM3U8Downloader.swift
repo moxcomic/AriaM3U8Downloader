@@ -20,6 +20,8 @@ public class AriaM3U8Downloader: NSObject {
         return que
     }()
     
+    fileprivate var tag: Int = 0
+    
     /// M3U8 URL
     fileprivate var M3U8_URL: URL!
     /// 下载输出路径
@@ -85,21 +87,21 @@ public class AriaM3U8Downloader: NSObject {
 // MARK: - Notification
 extension AriaM3U8Downloader {
     fileprivate func registerNotifications() {
-        NotificationCenter.default.rx.notification(custom: .DownloadTSSuccessNotification).takeUntil(self.rx.deallocated).subscribe() {
+        NotificationCenter.default.rx.notification(custom: .DownloadTSSuccessNotification, tag: tag).takeUntil(self.rx.deallocated).subscribe() {
             #if DEBUG
             print("-- RECEIVE DOWNLOAD TS SUCCESS NOTIFICATION --")
             #endif
             self.downloadTSSuccessExeBlock?("\($0.element?.object ?? "")")
         }.disposed(by: rx.disposeBag)
         
-        NotificationCenter.default.rx.notification(custom: .DownloadM3U8ProgressNotification).takeUntil(self.rx.deallocated).subscribe() {
+        NotificationCenter.default.rx.notification(custom: .DownloadM3U8ProgressNotification, tag: tag).takeUntil(self.rx.deallocated).subscribe() {
             #if DEBUG
             print("-- RECEIVE DOWNLOAD PROGRESS NOTIFICATION --")
             #endif
             self.downloadFileProgressExeBlock?(Float("\($0.element?.object ?? 0.0)")!)
         }.disposed(by: rx.disposeBag)
         
-        NotificationCenter.default.rx.notification(custom: .DownloadM3U8StartNotification).takeUntil(self.rx.deallocated).subscribe() {
+        NotificationCenter.default.rx.notification(custom: .DownloadM3U8StartNotification, tag: tag).takeUntil(self.rx.deallocated).subscribe() {
             #if DEBUG
             print("-- RECEIVE DOWNLOAD START NOTIFICATION --")
             print($0)
@@ -107,7 +109,7 @@ extension AriaM3U8Downloader {
             self.downloadStartExeBlock?()
         }.disposed(by: rx.disposeBag)
         
-        NotificationCenter.default.rx.notification(custom: .DownloadM3U8PausedNotification).takeUntil(self.rx.deallocated).subscribe() {
+        NotificationCenter.default.rx.notification(custom: .DownloadM3U8PausedNotification, tag: tag).takeUntil(self.rx.deallocated).subscribe() {
             #if DEBUG
             print("-- RECEIVE DOWNLOAD PAUSE NOTIFICATION --")
             print($0)
@@ -115,7 +117,7 @@ extension AriaM3U8Downloader {
             self.downloadPausedExeBlock?()
         }.disposed(by: rx.disposeBag)
         
-        NotificationCenter.default.rx.notification(custom: .DownloadM3U8ResumeNotification).takeUntil(self.rx.deallocated).subscribe() {
+        NotificationCenter.default.rx.notification(custom: .DownloadM3U8ResumeNotification, tag: tag).takeUntil(self.rx.deallocated).subscribe() {
             #if DEBUG
             print("-- RECEIVE DOWNLOAD RESUME NOTIFICATION --")
             print($0)
@@ -123,7 +125,7 @@ extension AriaM3U8Downloader {
             self.downloadResumeExeBlock?()
         }.disposed(by: rx.disposeBag)
         
-        NotificationCenter.default.rx.notification(custom: .DownloadM3U8StopNotification).takeUntil(self.rx.deallocated).subscribe() {
+        NotificationCenter.default.rx.notification(custom: .DownloadM3U8StopNotification, tag: tag).takeUntil(self.rx.deallocated).subscribe() {
             #if DEBUG
             print("-- RECEIVE DOWNLOAD STOP NOTIFICATION --")
             print($0)
@@ -131,7 +133,7 @@ extension AriaM3U8Downloader {
             self.downloadStopExeBlock?()
         }.disposed(by: rx.disposeBag)
         
-        NotificationCenter.default.rx.notification(custom: .DownloadM3U8CompleteNotification).takeUntil(self.rx.deallocated).subscribe() {
+        NotificationCenter.default.rx.notification(custom: .DownloadM3U8CompleteNotification, tag: tag).takeUntil(self.rx.deallocated).subscribe() {
             #if DEBUG
             print("-- RECEIVE DOWNLOAD COMPLETE NOTIFICATION --")
             print($0)
@@ -139,14 +141,14 @@ extension AriaM3U8Downloader {
             self.downloadCompleteExeBlock?()
         }.disposed(by: rx.disposeBag)
         
-        NotificationCenter.default.rx.notification(custom: .DownloadTSFailureNotification).takeUntil(self.rx.deallocated).subscribe() {
+        NotificationCenter.default.rx.notification(custom: .DownloadTSFailureNotification, tag: tag).takeUntil(self.rx.deallocated).subscribe() {
             #if DEBUG
             print("-- RECEIVE DOWNLOAD FAILURE NOTIFICATION --")
             #endif
             self.downloadTSFailureExeBlock?("\($0.element?.object ?? "")")
         }.disposed(by: rx.disposeBag)
         
-        NotificationCenter.default.rx.notification(custom: .DownloadM3U8StatusNotification).takeUntil(self.rx.deallocated).subscribe() {
+        NotificationCenter.default.rx.notification(custom: .DownloadM3U8StatusNotification, tag: tag).takeUntil(self.rx.deallocated).subscribe() {
             #if DEBUG
             print("-- RECEIVE DOWNLOAD STATUS NOTIFICATION --")
             #endif
@@ -224,7 +226,7 @@ extension AriaM3U8Downloader {
             return
         }
         getClip().subscribe(onNext: { (entity) in
-            NotificationCenter.post(customeNotification: .DownloadM3U8StartNotification)
+            NotificationCenter.post(customeNotification: .DownloadM3U8StartNotification, tag: self.tag)
             self.M3U8_Entity = entity
             if entity.EXT_X_KEY != nil { self.downloadKey() }
             self.downloadTS()
@@ -241,7 +243,7 @@ extension AriaM3U8Downloader {
     public func pause() {
         queue.isSuspended = true
         self.downloadStatus = .isPause
-        NotificationCenter.post(customeNotification: .DownloadM3U8PausedNotification)
+        NotificationCenter.post(customeNotification: .DownloadM3U8PausedNotification, tag: tag)
     }
     
     /// 恢复下载任务
@@ -250,7 +252,7 @@ extension AriaM3U8Downloader {
         if queue.operations.count > 0 { downloadStatus = .isDownloading }
         else { downloadStatus = .isComplete }
         queue.isSuspended = false
-        NotificationCenter.post(customeNotification: .DownloadM3U8ResumeNotification)
+        NotificationCenter.post(customeNotification: .DownloadM3U8ResumeNotification, tag: tag)
     }
     
     /// 停止下载任务
@@ -258,7 +260,7 @@ extension AriaM3U8Downloader {
     public func stop() {
         downloadStatus = .isStop
         queue.cancelAllOperations()
-        NotificationCenter.post(customeNotification: .DownloadM3U8StopNotification)
+        NotificationCenter.post(customeNotification: .DownloadM3U8StopNotification, tag: tag)
     }
 }
 
@@ -284,7 +286,7 @@ extension AriaM3U8Downloader {
                     #if DEBUG
                     print("\(self.M3U8_URL.absoluteString):\nKEY ->\(url): ->\n下载失败")
                     #endif
-                    NotificationCenter.post(customeNotification: .DownloadTSFailureNotification, object: "key.key")
+                    NotificationCenter.post(customeNotification: .DownloadTSFailureNotification, tag: self.tag, object: "key.key")
                 }
                 semaphore.signal()
             }
@@ -299,7 +301,7 @@ extension AriaM3U8Downloader {
             if FileManager.default.fileExists(atPath: fv.path) {
                 #if DEBUG
                 print("\(ts): 文件已存在,跳过下载")
-                NotificationCenter.post(customeNotification: .DownloadTSSuccessNotification, object: ts)
+                NotificationCenter.post(customeNotification: .DownloadTSSuccessNotification, tag: tag, object: ts)
                 #endif
                 continue
             }
@@ -318,13 +320,13 @@ extension AriaM3U8Downloader {
                         #if DEBUG
                         print("\(self.M3U8_URL.absoluteString):\nTS ->\(url): ->\n下载完成")
                         #endif
-                        NotificationCenter.post(customeNotification: .DownloadTSSuccessNotification, object: ts)
+                        NotificationCenter.post(customeNotification: .DownloadTSSuccessNotification, tag: self.tag, object: ts)
                     case .failure(_):
                         #if DEBUG
                         print("\(self.M3U8_URL.absoluteString):\nTS ->\(url): ->\n下载失败")
                         #endif
                         self.M3U8_Entity.FAILURE_TSDATA.append(ts)
-                        NotificationCenter.post(customeNotification: .DownloadTSFailureNotification, object: ts)
+                        NotificationCenter.post(customeNotification: .DownloadTSFailureNotification, tag: self.tag, object: ts)
                     }
                     #if DEBUG
                     print("queque count:\(self.queue.operations.count)")
@@ -332,7 +334,7 @@ extension AriaM3U8Downloader {
                     if self.downloadStatus != .isStop {
                         let opCount = self.queue.operations.count
                         let dCount = self.M3U8_Entity.TSDATA.count - opCount
-                        NotificationCenter.post(customeNotification: .DownloadM3U8ProgressNotification, object: Float(Float(dCount) / Float(self.M3U8_Entity.TSDATA.count)))
+                        NotificationCenter.post(customeNotification: .DownloadM3U8ProgressNotification, tag: self.tag, object: Float(Float(dCount) / Float(self.M3U8_Entity.TSDATA.count)))
                     }
                     semaphore.signal()
                 }
@@ -340,19 +342,19 @@ extension AriaM3U8Downloader {
                 if self.downloadStatus != .isStop {
                     let opCount = self.queue.operations.count
                     let dCount = self.M3U8_Entity.TSDATA.count - opCount
-                    NotificationCenter.post(customeNotification: .DownloadM3U8StatusNotification, object: [dCount, self.M3U8_Entity.TSDATA.count])
+                    NotificationCenter.post(customeNotification: .DownloadM3U8StatusNotification, tag: self.tag, object: [dCount, self.M3U8_Entity.TSDATA.count])
                 }
             }
         }
         DispatchQueue.global().async {
             self.queue.waitUntilAllOperationsAreFinished()
             if self.downloadStatus != .isStop {
-                NotificationCenter.post(customeNotification: .DownloadM3U8StatusNotification, object: [self.M3U8_Entity.TSDATA.count, self.M3U8_Entity.TSDATA.count])
+                NotificationCenter.post(customeNotification: .DownloadM3U8StatusNotification, tag: self.tag, object: [self.M3U8_Entity.TSDATA.count, self.M3U8_Entity.TSDATA.count])
                 if self.queue.operations.count == 0 {
                     self.createLocalM3U8File()
                     self.downloadStatus = .isComplete
-                    NotificationCenter.post(customeNotification: .DownloadM3U8ProgressNotification, object: 1.0)
-                    NotificationCenter.post(customeNotification: .DownloadM3U8CompleteNotification)
+                    NotificationCenter.post(customeNotification: .DownloadM3U8ProgressNotification, tag: self.tag, object: 1.0)
+                    NotificationCenter.post(customeNotification: .DownloadM3U8CompleteNotification, tag: self.tag)
                 }
             }
         }
@@ -526,7 +528,7 @@ extension AriaM3U8Downloader {
 // MARK: - Init
 extension AriaM3U8Downloader {
     @objc
-    public convenience init(withURLString urlString: String, outputPath: String) {
+    public convenience init(withURLString urlString: String, outputPath: String, tag: Int = 0) {
         self.init()
         guard let m3u8 = URL(string: urlString) else {
             #if DEBUG
@@ -537,6 +539,7 @@ extension AriaM3U8Downloader {
         let output = URL(fileURLWithPath: outputPath)
         M3U8_URL = m3u8
         OUTPUT_PATH = output
+        self.tag = tag
         registerNotifications()
         downloadStatus = .isReadyToDownload
     }

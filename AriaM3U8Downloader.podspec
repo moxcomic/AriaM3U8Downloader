@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "AriaM3U8Downloader"
-  s.version          = "0.0.4"
+  s.version          = "0.0.5"
   s.summary          = "A Swift M3U8 Downloader."
   s.homepage         = "https://github.com/moxcomic/AriaM3U8Downloader.git"
   s.license          = { :type => "MIT", :file => "LICENSE" }
