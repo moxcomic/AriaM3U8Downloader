@@ -37,7 +37,7 @@ extension DownloadListViewController {
         
         let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         
-        let url = indexPath.row == 0 ? "https://youku.cdn3-okzy.com/20191210/4859_eab5780a/index.m3u8" : "https://youku.cdn2-okzy.com/20191129/5963_a84d35d8/index.m3u8"
+        let url = indexPath.row == 0 ? "http://183.159.37.34:8649/srv-videos/40/media/CA08E6D22DFA4D93B9B849E2D813F65D/CA08E6D22DFA4D93B9B849E2D813F65D_playlist_sub.m3u8" : "https://youku.cdn2-okzy.com/20191129/5963_a84d35d8/index.m3u8"
         let downloader = AriaM3U8Downloader(withURLString: url, outputPath: documentPath.path, tag: indexPath.row)
         downloader.start()
         

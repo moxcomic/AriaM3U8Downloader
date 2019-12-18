@@ -17,6 +17,7 @@ class M3U8Entity: NSObject {
     var EXT_X_TARGETDURATION: Int = 0
     var EXT_X_MEDIA_SEQUENCE: Int = 0
     var EXT_X_KEY: String!
+    var EXT_X_IV: String!
     var METHOD: String!
     var INFDATA = [Float]()
     var TSDATA = [String]()

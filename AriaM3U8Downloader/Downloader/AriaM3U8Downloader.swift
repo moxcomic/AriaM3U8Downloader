@@ -202,7 +202,7 @@ extension AriaM3U8Downloader {
         #EXT-X-VERSION:3
         #EXT-X-TARGETDURATION:60\n
         """
-        if M3U8_Entity.EXT_X_KEY != nil { header.append("\n#EXT-X-KEY:METHOD=\(M3U8_Entity.METHOD!),URI=\"\(M3U8_Entity.EXT_X_KEY!)\"\n") }
+        if M3U8_Entity.EXT_X_KEY != nil { header.append("\n#EXT-X-KEY:METHOD=\(M3U8_Entity.METHOD!),URI=\"\(M3U8_Entity.EXT_X_KEY!)\"\(M3U8_Entity.EXT_X_IV == nil ? "" : ",IV=\(M3U8_Entity.EXT_X_IV!)")\n") }
         for i in 0..<totalCount {
             header.append("#EXTINF:\(M3U8_Entity.INFDATA[i]),\n\(M3U8_Entity.TSDATA[i])\n")
         }
@@ -269,7 +269,7 @@ extension AriaM3U8Downloader {
     fileprivate func downloadKey() {
         let semaphore = DispatchSemaphore(value: 0)
         queue.addOperation {
-            let url = self.TRUE_Prefix.appendingPathComponent(self.M3U8_Entity.EXT_X_KEY.hasPrefix("/") ? self.M3U8_Entity.EXT_X_KEY : "/\(self.M3U8_Entity.EXT_X_KEY!)")
+            let url = self.M3U8_Entity.EXT_X_KEY.hasPrefix("http") ? self.M3U8_Entity.EXT_X_KEY! : (self.TRUE_Prefix.appendingPathComponent(self.M3U8_Entity.EXT_X_KEY.hasPrefix("/") ? self.M3U8_Entity.EXT_X_KEY : "/\(self.M3U8_Entity.EXT_X_KEY!)")).path
             AriaBackgroundManager.shared.manager.download(url) { (url, response) -> (destinationURL: URL, options: DownloadRequest.DownloadOptions) in
                 guard let output = self.OUTPUT_PATH else { return (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0], []) }
                 let fileURL = output.appendingPathComponent(response.suggestedFilename!)
@@ -451,19 +451,25 @@ extension AriaM3U8Downloader {
                 
                 if m.hasPrefix("#EXT-X-KEY:") {
                     let value = m.replacingOccurrences(of: "#EXT-X-KEY:", with: "")
-                    let split = value.components(separatedBy: ",")
-                    for s in split {
-                        let ss = s.components(separatedBy: "=")
-                        if ss.count > 1 {
-                            switch ss[0] {
-                            case "METHOD": entity.METHOD = ss[1]
-                            case "URI":
-                                let uri = ss[1].replacingOccurrences(of: "\"", with: "")
-                                entity.EXT_X_KEY = uri.components(separatedBy: "/").last!
-                            default: continue
-                            }
-                        }
-                    }
+                    var split = value.components(separatedBy: ",")
+                    let method = split[0].components(separatedBy: "=")[1]
+                    split.remove(at: 0)
+                    let uri = split.joined(separator: "").components(separatedBy: "URI=\"")[1].components(separatedBy: "\"IV=")
+                    entity.METHOD = method
+                    entity.EXT_X_KEY = uri[0].hasPrefix("http") ? uri[0] : uri[0].components(separatedBy: "/").last!
+                    if uri.count > 1 { entity.EXT_X_IV = uri[1] }
+//                    for s in split {
+//                        let ss = s.components(separatedBy: "=")
+//                        if ss.count > 1 {
+//                            switch ss[0] {
+//                            case "METHOD": entity.METHOD = ss[1]
+//                            case "URI":
+//                                let uri = ss[1].replacingOccurrences(of: "\"", with: "")
+//                                entity.EXT_X_KEY = uri.components(separatedBy: "/").last!
+//                            default: continue
+//                            }
+//                        }
+//                    }
                 }
                 
                 if m.hasPrefix("#EXTINF:") {
@@ -513,13 +519,14 @@ extension AriaM3U8Downloader {
         }
         let target = url ?? M3U8_URL
         let scheme = target!.scheme!
+        let port = target!.port ?? -1
         let host = target!.host!
         let path = target!.path.components(separatedBy: "/").filter { !$0.isEmpty && !$0.hasSuffix(".m3u8") }
         var urlClips = [String]()
-        urlClips.append("\(scheme)://\(host)")
+        urlClips.append("\(scheme)://\(host)\(port == -1 ? "" : ":\(port)")")
         for i in 0..<path.count {
             let p = path[0...i].joined(separator: "/")
-            urlClips.append("\(scheme)://\(host)/\(p)")
+            urlClips.append("\(scheme)://\(host)\(port == -1 ? "" : ":\(port)")/\(p)")
         }
         return urlClips
     }
