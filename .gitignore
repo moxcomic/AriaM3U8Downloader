@@ -66,3 +66,9 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# Claude / AI 工具相关（不上传）
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+.mcp.json
