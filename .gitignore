@@ -39,6 +39,8 @@ playground.xcworkspace
 # Package.pins
 # Package.resolved
 .build/
+.swiftpm/
+.DS_Store
 
 # CocoaPods
 #
@@ -72,3 +74,5 @@ fastlane/test_output
 CLAUDE.md
 CLAUDE.local.md
 .mcp.json
+# Claude 生成的规划文档（不上传）
+MIGRATION-PLAN.md
