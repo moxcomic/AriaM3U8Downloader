@@ -5,100 +5,118 @@
 //  Created by 神崎H亚里亚 on 2019/11/28.
 //  Copyright © 2019 moxcomic. All rights reserved.
 //
+//  迁移：去除 SJVideoPlayer/SnapKit，改用系统 AVPlayer；下载回调由 block 改为 async 事件流。
+//
 
 import UIKit
+import AVFoundation
 import AriaM3U8Downloader
-import SJVideoPlayer
-import SnapKit
+import AriaM3U8LocalServer
 
 class ViewController: UIViewController {
-    var downloader: AriaM3U8Downloader!
-
-    @IBAction func startButton(_ sender: Any) {
-        if downloader != nil { return }
-        
-        let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        // Once
-        // https://v01-gl-vod.dtslb.com/201910/22/09YSU2z4/3721kb/hls/index.m3u8
-        // Seconds
-        // https://youku.com-ok-pptv.com/20191003/7712_b1cd8a61/index.m3u8
-        downloader = AriaM3U8Downloader(withURLString: "http://183.159.37.34:8649/srv-videos/40/media/CA08E6D22DFA4D93B9B849E2D813F65D/CA08E6D22DFA4D93B9B849E2D813F65D_playlist_sub.m3u8", outputPath: documentPath.path, tag: 0)
-        downloader.start()
-        
-        downloader.downloadTSSuccessExeBlock = { self.statusLabel.text = $0 }
-        downloader.downloadFileProgressExeBlock = { (event) in
-            DispatchQueue.main.async {
-                self.progressView.progress = event
-            }
-        }
-        downloader.downloadM3U8StatusExeBlock = { (d, t) in
-            DispatchQueue.main.async {
-                self.countLabel.text = "\(d)/\(t)"
-            }
-        }
-        downloader.downloadCompleteExeBlock = {
-            DispatchQueue.main.async {
-                self.statusLabel.text = "下载任务全部完成"
-            }
-        }
-    }
-    
-    @IBAction func pauseButton(_ sender: Any) {
-        if downloader == nil { return }
-        downloader.pause()
-    }
-    
-    @IBAction func resumeButton(_ sender: Any) {
-        if downloader == nil { return }
-        downloader.resume()
-    }
-    
-    @IBAction func stopButton(_ sender: Any) {
-        if downloader == nil { return }
-        downloader.stop()
-        downloader = nil
-    }
-    @IBAction func tempPlayButton(_ sender: Any) {
-        guard
-            let d = downloader,
-            let server = AriaM3U8LocalServer.shared.getLocalServerURLString()
-            else { print("未下载或者本地服务未开启"); return }
-        d.createTempLocalM3U8File()
-        let index = server.appending("/index.m3u8")
-        
-        let asset = SJVideoPlayerURLAsset(url: URL(string: index)!)
-        asset?.title = "AriaM3U8Downloader"
-        player.urlAsset = asset
-    }
-    
-    @IBAction func playButton(_ sender: Any) {
-        guard
-            let d = downloader,
-            let server = AriaM3U8LocalServer.shared.getLocalServerURLString()
-            else { print("未下载或者本地服务未开启"); return }
-        d.createLocalM3U8File()
-        let index = server.appending("/index.m3u8")
-        
-        let asset = SJVideoPlayerURLAsset(url: URL(string: index)!)
-        asset?.title = "AriaM3U8Downloader"
-        player.urlAsset = asset
-    }
-    
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var progressView: UIProgressView!
     @IBOutlet weak var countLabel: UILabel!
     @IBOutlet weak var playView: UIView!
-    var player = SJVideoPlayer()
-    
+
+    private var downloader: AriaM3U8Downloader?
+    private var eventTask: Task<Void, Never>?
+    private let player = AVPlayer()
+    private var playerLayer: AVPlayerLayer?
+
+    private var outputDirectory: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        let documentPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        AriaM3U8LocalServer.shared.start(withPath: documentPath.path)
-        
-        playView.addSubview(player.view)
-        player.view.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+        try? AriaM3U8LocalServer.shared.start(path: outputDirectory.path)
+
+        let layer = AVPlayerLayer(player: player)
+        layer.videoGravity = .resizeAspect
+        playView.layer.addSublayer(layer)
+        playerLayer = layer
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        playerLayer?.frame = playView.bounds
+    }
+
+    @IBAction func startButton(_ sender: Any) {
+        guard downloader == nil else { return }
+        // 示例地址；双层 m3u8 示例见 README
+        guard let url = URL(string: "http://183.159.37.34:8649/srv-videos/40/media/CA08E6D22DFA4D93B9B849E2D813F65D/CA08E6D22DFA4D93B9B849E2D813F65D_playlist_sub.m3u8") else { return }
+
+        let downloader = AriaM3U8Downloader(url: url, outputDirectory: outputDirectory)
+        self.downloader = downloader
+        eventTask = Task { [weak self] in
+            for await event in downloader.events {
+                self?.handle(event)
+            }
+        }
+        downloader.start()
+    }
+
+    @IBAction func pauseButton(_ sender: Any) { downloader?.pause() }
+
+    @IBAction func resumeButton(_ sender: Any) { downloader?.resume() }
+
+    @IBAction func stopButton(_ sender: Any) {
+        downloader?.cancel()
+        eventTask?.cancel()
+        downloader = nil
+    }
+
+    /// 边下边播：仅用已下载切片生成临时播放列表
+    @IBAction func tempPlayButton(_ sender: Any) {
+        Task { await play(downloadedOnly: true) }
+    }
+
+    /// 播放完整列表
+    @IBAction func playButton(_ sender: Any) {
+        Task { await play(downloadedOnly: false) }
+    }
+
+    @MainActor
+    private func handle(_ event: DownloadEvent) {
+        switch event {
+        case .segmentCompleted(let name, let completed, let total):
+            statusLabel.text = name
+            countLabel.text = "\(completed)/\(total)"
+        case .progress(let value):
+            progressView.progress = Float(value)
+        case .completed:
+            statusLabel.text = "下载任务全部完成"
+        case .segmentFailed(let name):
+            statusLabel.text = "切片失败: \(name)"
+        case .failed(let message):
+            statusLabel.text = "失败: \(message)"
+        default:
+            break
         }
     }
-}
 
+    private func play(downloadedOnly: Bool) async {
+        guard
+            let downloader,
+            let server = AriaM3U8LocalServer.shared.localServerURLString()
+        else {
+            print("未下载或本地服务未开启")
+            return
+        }
+        do {
+            if downloadedOnly {
+                try await downloader.makeLocalPlaylistForDownloaded()
+            } else {
+                try await downloader.makeLocalPlaylist()
+            }
+        } catch {
+            print("生成播放文件失败: \(error)")
+            return
+        }
+        guard let url = URL(string: server + "/index.m3u8") else { return }
+        player.replaceCurrentItem(with: AVPlayerItem(url: url))
+        player.play()
+    }
+}

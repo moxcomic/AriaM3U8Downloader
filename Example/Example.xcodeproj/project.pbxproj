@@ -17,9 +17,8 @@
 		02E879D923901903006F6F25 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02E879D723901903006F6F25 /* LaunchScreen.storyboard */; };
 		02E879E423901903006F6F25 /* ExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E879E323901903006F6F25 /* ExampleTests.swift */; };
 		02E879EF23901903006F6F25 /* ExampleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02E879EE23901903006F6F25 /* ExampleUITests.swift */; };
-		32EEF26BB122AA896C2E4A55 /* Pods_Example_ExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B100E49A6747316B164A2733 /* Pods_Example_ExampleUITests.framework */; };
-		42C58A4CD0CD09015D3BFBE1 /* Pods_ExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1A5A27BC90AC3E600801A458 /* Pods_ExampleTests.framework */; };
-		B95E0F6F8F4452EE165FAC3A /* Pods_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A71786D58F95BBD12C973E7 /* Pods_Example.framework */; };
+		AA00000000000000000000A1 /* AriaM3U8Downloader in Frameworks */ = {isa = PBXBuildFile; productRef = AA00000000000000000000B1 /* AriaM3U8Downloader */; };
+		AA00000000000000000000A2 /* AriaM3U8LocalServer in Frameworks */ = {isa = PBXBuildFile; productRef = AA00000000000000000000B2 /* AriaM3U8LocalServer */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,15 +55,6 @@
 		02E879EA23901903006F6F25 /* ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		02E879EE23901903006F6F25 /* ExampleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleUITests.swift; sourceTree = "<group>"; };
 		02E879F023901903006F6F25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		06FAD66E0E20644D7D0D0B10 /* Pods-ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleTests.release.xcconfig"; path = "Target Support Files/Pods-ExampleTests/Pods-ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
-		12E2CB699AB3CBCE9079D819 /* Pods-ExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-ExampleTests/Pods-ExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
-		1A5A27BC90AC3E600801A458 /* Pods_ExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		4A71786D58F95BBD12C973E7 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6FC1F844707275E7FC0527BA /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.debug.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
-		8203A4C67F9B9877725FD1C2 /* Pods-Example-ExampleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example-ExampleUITests.debug.xcconfig"; path = "Target Support Files/Pods-Example-ExampleUITests/Pods-Example-ExampleUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		9393CD3175E740DC90B414C4 /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example.release.xcconfig"; path = "Target Support Files/Pods-Example/Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
-		B100E49A6747316B164A2733 /* Pods_Example_ExampleUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Example_ExampleUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E092EE12302EA3CEE3B9D2A2 /* Pods-Example-ExampleUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Example-ExampleUITests.release.xcconfig"; path = "Target Support Files/Pods-Example-ExampleUITests/Pods-Example-ExampleUITests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,7 +62,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B95E0F6F8F4452EE165FAC3A /* Pods_Example.framework in Frameworks */,
+				AA00000000000000000000A1 /* AriaM3U8Downloader in Frameworks */,
+				AA00000000000000000000A2 /* AriaM3U8LocalServer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,7 +71,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				42C58A4CD0CD09015D3BFBE1 /* Pods_ExampleTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,7 +78,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				32EEF26BB122AA896C2E4A55 /* Pods_Example_ExampleUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,8 +91,6 @@
 				02E879E223901903006F6F25 /* ExampleTests */,
 				02E879ED23901903006F6F25 /* ExampleUITests */,
 				02E879CA23901902006F6F25 /* Products */,
-				1C34897237D5B752123DB7C8 /* Pods */,
-				1272460D7400E5AAC690D468 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -151,29 +138,6 @@
 			path = ExampleUITests;
 			sourceTree = "<group>";
 		};
-		1272460D7400E5AAC690D468 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				4A71786D58F95BBD12C973E7 /* Pods_Example.framework */,
-				B100E49A6747316B164A2733 /* Pods_Example_ExampleUITests.framework */,
-				1A5A27BC90AC3E600801A458 /* Pods_ExampleTests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		1C34897237D5B752123DB7C8 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				6FC1F844707275E7FC0527BA /* Pods-Example.debug.xcconfig */,
-				9393CD3175E740DC90B414C4 /* Pods-Example.release.xcconfig */,
-				8203A4C67F9B9877725FD1C2 /* Pods-Example-ExampleUITests.debug.xcconfig */,
-				E092EE12302EA3CEE3B9D2A2 /* Pods-Example-ExampleUITests.release.xcconfig */,
-				12E2CB699AB3CBCE9079D819 /* Pods-ExampleTests.debug.xcconfig */,
-				06FAD66E0E20644D7D0D0B10 /* Pods-ExampleTests.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -181,17 +145,19 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02E879F323901903006F6F25 /* Build configuration list for PBXNativeTarget "Example" */;
 			buildPhases = (
-				70C4D83130E79515BB745234 /* [CP] Check Pods Manifest.lock */,
 				02E879C523901902006F6F25 /* Sources */,
 				02E879C623901902006F6F25 /* Frameworks */,
 				02E879C723901902006F6F25 /* Resources */,
-				5B0A1B3E4CD3F051154DEDC7 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = Example;
+			packageProductDependencies = (
+				AA00000000000000000000B1 /* AriaM3U8Downloader */,
+				AA00000000000000000000B2 /* AriaM3U8LocalServer */,
+			);
 			productName = Example;
 			productReference = 02E879C923901902006F6F25 /* Example.app */;
 			productType = "com.apple.product-type.application";
@@ -200,7 +166,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02E879F623901903006F6F25 /* Build configuration list for PBXNativeTarget "ExampleTests" */;
 			buildPhases = (
-				7DA58F8E54B0E227100A7F58 /* [CP] Check Pods Manifest.lock */,
 				02E879DB23901903006F6F25 /* Sources */,
 				02E879DC23901903006F6F25 /* Frameworks */,
 				02E879DD23901903006F6F25 /* Resources */,
@@ -219,11 +184,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02E879F923901903006F6F25 /* Build configuration list for PBXNativeTarget "ExampleUITests" */;
 			buildPhases = (
-				0BF1BD8B320C2351D01740EC /* [CP] Check Pods Manifest.lock */,
 				02E879E623901903006F6F25 /* Sources */,
 				02E879E723901903006F6F25 /* Frameworks */,
 				02E879E823901903006F6F25 /* Resources */,
-				DA717D3F05E2EF5EECF89CA2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -267,6 +230,9 @@
 				Base,
 			);
 			mainGroup = 02E879C023901902006F6F25;
+			packageReferences = (
+				AA00000000000000000000C1 /* XCLocalSwiftPackageReference ".." */,
+			);
 			productRefGroup = 02E879CA23901902006F6F25 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -522,7 +488,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -576,7 +542,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -588,7 +554,6 @@
 		};
 		02E879F423901903006F6F25 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6FC1F844707275E7FC0527BA /* Pods-Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -607,7 +572,6 @@
 		};
 		02E879F523901903006F6F25 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9393CD3175E740DC90B414C4 /* Pods-Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -626,14 +590,13 @@
 		};
 		02E879F723901903006F6F25 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 12E2CB699AB3CBCE9079D819 /* Pods-ExampleTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CU8H9UQL9A;
 				INFOPLIST_FILE = ExampleTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -649,14 +612,13 @@
 		};
 		02E879F823901903006F6F25 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 06FAD66E0E20644D7D0D0B10 /* Pods-ExampleTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = CU8H9UQL9A;
 				INFOPLIST_FILE = ExampleTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -672,7 +634,6 @@
 		};
 		02E879FA23901903006F6F25 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8203A4C67F9B9877725FD1C2 /* Pods-Example-ExampleUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -693,7 +654,6 @@
 		};
 		02E879FB23901903006F6F25 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E092EE12302EA3CEE3B9D2A2 /* Pods-Example-ExampleUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -752,6 +712,24 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		AA00000000000000000000C1 /* XCLocalSwiftPackageReference ".." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ..;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AA00000000000000000000B1 /* AriaM3U8Downloader */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AriaM3U8Downloader;
+		};
+		AA00000000000000000000B2 /* AriaM3U8LocalServer */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AriaM3U8LocalServer;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 02E879C123901902006F6F25 /* Project object */;
 }

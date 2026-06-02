@@ -1,0 +1,49 @@
+# SwiftLint 配置 —— AriaM3U8Downloader
+# 安装：brew install swiftlint
+# 运行（仓库根目录）：swiftlint            # 检查
+#                     swiftlint --fix      # 自动修复可修复项
+
+# 只检查本项目自己的源码
+included:
+  - AriaM3U8Downloader/Downloader
+  - AriaM3U8Downloader/LocalServer
+  - Tests
+  - Example/Example
+
+excluded:
+  - .build
+  - .swiftpm
+  - build
+  - DerivedData
+  - "**/*.generated.swift"
+
+# 适度放宽，贴合现有风格（详见 CLAUDE.md）
+line_length:
+  warning: 160
+  error: 220
+  ignores_comments: true   # 中文注释较长，不计入行长
+
+# 现有代码用 TSDATA 等大写常量、单字母/下划线前缀命名，放宽以免噪音过多
+identifier_name:
+  min_length: 1
+  max_length:
+    warning: 60
+  allowed_symbols: ["_"]
+  validates_start_with_lowercase: false
+
+type_name:
+  max_length:
+    warning: 60
+
+# 这些默认规则对当前代码噪音过大，暂时关闭（需要时再逐步开启）
+disabled_rules:
+  - todo                # 允许 TODO/FIXME 注释
+  - trailing_whitespace
+  - cyclomatic_complexity  # AriaM3U8Downloader.swift 解析逻辑较长
+  - function_body_length
+  - file_length
+
+# 可选的额外规则（默认未启用，按需打开）
+opt_in_rules:
+  - empty_count
+  - closure_spacing

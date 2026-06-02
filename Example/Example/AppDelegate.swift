@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import AriaM3U8Downloader
 import AVKit
 
 @UIApplicationMain
@@ -42,10 +41,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
-    func application(_ application: UIApplication, handleEventsForBackgroundURLSession identifier: String, completionHandler: @escaping () -> Void) {
-        AriaBackgroundManager.shared.manager.backgroundCompletionHandler = completionHandler
-    }
-    
     func applicationDidEnterBackground(_ application: UIApplication) {
         backgroundTaskID = UIApplication.shared.beginBackgroundTask {
             
